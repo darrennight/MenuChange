@@ -1,6 +1,7 @@
 package mc.wxp.com.menuchange;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -43,6 +44,8 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     private int mDegree1 = 0;
     private int mDegree2 = 0;
 
+    private int mBgColor = R.color.bg_color;
+    private int mLineColor = R.color.line_color;
     /*
      *动画分两步进行，true为第一步，false为第二步
      */
@@ -55,32 +58,41 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     boolean mCurrentState = true;
 
     public AddDes(Context context) {
-        this(context, null);
+        super(context);
+        init(context,null,0);
     }
 
     public AddDes(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init(context,attrs,0);
     }
 
     public AddDes(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context);
+        super(context,attrs,defStyleAttr);
+        init(context, attrs, defStyleAttr);
     }
 
-    public void init(Context context) {
+    public void init(Context context,AttributeSet attrs, int defStyleAttr) {
         mContext = context;
+
+        TypedArray attrsArray = context.obtainStyledAttributes(attrs, R.styleable.AddDes, defStyleAttr, 0);
+
+        mBgColor = attrsArray.getInt(R.styleable.AddDes_backgroundcolor,R.color.bg_color);
+        mLineColor = attrsArray.getInt(R.styleable.AddDes_linecolor,R.color.line_color);
+        attrsArray.recycle();
+
         mPaintH = new Paint();
         mPaintH.setAntiAlias(true);
-        mPaintH.setColor(Color.WHITE);
+        mPaintH.setColor(mLineColor);
         mPaintH.setDither(true);
         mPaintH.setStyle(Paint.Style.STROKE);
         mPaintH.setStrokeWidth(10f);
 
         mPaintV = new Paint();
         mPaintV.setAntiAlias(true);
-        mPaintV.setColor(Color.RED);
+        mPaintV.setColor(mBgColor);
         mPaintV.setDither(true);
-        mPaintV.setStyle(Paint.Style.STROKE);
+        mPaintV.setStyle(Paint.Style.FILL);
         mPaintV.setStrokeWidth(10f);
 
         mSqrt = Math.sqrt((double) 2);
@@ -96,26 +108,11 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        mWidth = widthSize;
 
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
-        Drawable bgDrawable = getBackground();
-        int bgW = bgDrawable.getIntrinsicWidth();
-        int bgH = bgDrawable.getIntrinsicHeight();
-
-        if (widthMode == MeasureSpec.EXACTLY) {
-            mWidth = widthSize;
-        } else {
-            mWidth = bgW;
-        }
-
-        if (heightMode == MeasureSpec.EXACTLY) {
-            mHeight = heightSize;
-        } else {
-            mHeight = bgH;
-        }
-
+        mHeight = heightSize;
 
         float EDG = (float) mWidth;
 
@@ -135,6 +132,7 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     @Override
     protected void onDraw(Canvas canvas) {
         //super.onDraw(canvas);
+        canvas.drawCircle(mWidth/2,mHeight/2,mWidth/2,mPaintV);
         if (mCurrentState == true) {
         if (flag == true) {
             canvas.save();
@@ -150,7 +148,6 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
             canvas.restore();
         }
         } else {
-            Log.e("wxp","qunide");
             if (flag == true) {
                 canvas.save();
                 canvas.rotate(mDegree1, mWidth / 2, mHeight / 2);
@@ -248,17 +245,17 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0) {
-                Log.e("wxp","000");
+                //Log.e("wxp","000");
                 invalidate();
             }
             if (msg.what == 1) {
-                Log.e("wxp","111");
+                //Log.e("wxp","111");
                 flag = false;
                 mDegree1 = 0;
                 startStep2();
             }
             if (msg.what == 2) {
-                Log.e("wxp","222");
+                //Log.e("wxp","222");
                 //mDegree2 = 0;
                 flag = true;
                 if (mCurrentState == true)

@@ -5,7 +5,11 @@ MenuChange
 
 #### 1.加减变形 ####
 
-设置状态监听：
+###### 使用 ######
+
+>通过长按切换状态，通过点击来加分或者减分
+
+>设置状态监听：
 
 ```
 mAddDes.setOnStatChangeListener(new OnStateChangeListener(){

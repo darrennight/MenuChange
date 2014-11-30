@@ -19,7 +19,12 @@ public class MyActivity extends Activity {
         mAddDes.setOnStateChange(new AddDes.OnStateChangeListener() {
             @Override
             public void changeState(boolean state) {
-                Toast.makeText(MyActivity.this, "state:"+state, Toast.LENGTH_SHORT).show();
+                if (state){
+                    Toast.makeText(MyActivity.this, "加一分", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MyActivity.this, "减一分", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });

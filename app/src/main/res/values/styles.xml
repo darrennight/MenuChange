@@ -5,4 +5,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <declare-styleable name="AddDes">
+        <attr name="edge" format="dimension" />
+        <attr name="backgroundcolor" format="color" />
+        <attr name="linecolor" format="color" />
+    </declare-styleable>
+
 </resources>
