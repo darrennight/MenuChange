@@ -170,15 +170,6 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        /*switch (event.getAction()){
-            case MotionEvent.A
-        }*/
-        return super.onTouchEvent(event);
-    }
-
-    @Override
     public boolean onLongClick(View v) {
         //Toast.makeText(mContext, "LONG", Toast.LENGTH_SHORT).show();
         startStep1();
@@ -187,8 +178,17 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
 
     @Override
     public void onClick(View v) {
-        Toast.makeText(mContext, "Click", Toast.LENGTH_SHORT).show();
+        mOnStateChangeListener.changeState(mCurrentState);
 
+    }
+
+    OnStateChangeListener mOnStateChangeListener;
+    public interface OnStateChangeListener{
+        public void changeState(boolean state);
+    }
+
+    public void setOnStateChange(OnStateChangeListener listener){
+        mOnStateChangeListener = listener;
     }
 
     public void startStep1() {
@@ -267,5 +267,6 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
             }
         }
     };
+
 
 }

@@ -9,6 +9,7 @@
     tools:context=".MyActivity">
 
     <mc.wxp.com.menuchange.AddDes
+        android:id="@+id/id_score_change"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:padding="0dp"

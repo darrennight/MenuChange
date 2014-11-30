@@ -4,14 +4,25 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 
 public class MyActivity extends Activity {
 
+    AddDes mAddDes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
+        mAddDes = (AddDes) findViewById(R.id.id_score_change);
+        mAddDes.setOnStateChange(new AddDes.OnStateChangeListener() {
+            @Override
+            public void changeState(boolean state) {
+                Toast.makeText(MyActivity.this, "state:"+state, Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 
