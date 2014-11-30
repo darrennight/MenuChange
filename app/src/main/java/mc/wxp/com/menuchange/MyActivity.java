@@ -4,32 +4,36 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
-
+import mc.wxp.com.menuchange.OnStatChangeListener;
 
 public class MyActivity extends Activity {
 
-    AddDes mAddDes;
+    private AddDes_Style01 mAddDes;
+    private AddDes_Style02 mAddDes02;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-        mAddDes = (AddDes) findViewById(R.id.id_score_change);
-        mAddDes.setOnStateChange(new AddDes.OnStateChangeListener() {
-            @Override
-            public void changeState(boolean state) {
-                if (state){
-                    Toast.makeText(MyActivity.this, "加一分", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MyActivity.this, "减一分", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });
+        mAddDes = (AddDes_Style01) findViewById(R.id.id_score_change);
+        mAddDes02 = (AddDes_Style02) findViewById(R.id.id_score_change2);
+        mAddDes.setOnStateChange(mStateChangeListener);
+        mAddDes02.setOnStateChange(mStateChangeListener);
     }
 
+
+    private OnStatChangeListener mStateChangeListener= new OnStatChangeListener() {
+        @Override
+        public void changeState(boolean state) {
+            if (state){
+                Toast.makeText(MyActivity.this, "加一分", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(MyActivity.this, "减一分", Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

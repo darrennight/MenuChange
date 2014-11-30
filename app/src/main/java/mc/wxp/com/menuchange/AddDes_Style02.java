@@ -3,26 +3,22 @@ package mc.wxp.com.menuchange;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
-
+import mc.wxp.com.menuchange.OnStatChangeListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * 加变减
+ * 加变减，动画效果2
  * Created by whisper on 14-11-29.
  */
-public class AddDes extends View implements View.OnLongClickListener, View.OnClickListener {
+public class AddDes_Style02 extends View implements View.OnLongClickListener, View.OnClickListener {
 
+    private int PERIOD = 20;
     private int mWidth = 0;
     private int mHeight = 0;
 
@@ -33,6 +29,8 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
 
     private CusLine mHor;
     private CusLine mVer;
+    private CusLine mQua1;
+    private CusLine mQua2;
 
     private Context mContext;
     private Timer mTimer1;
@@ -57,17 +55,17 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
      */
     boolean mCurrentState = true;
 
-    public AddDes(Context context) {
+    public AddDes_Style02(Context context) {
         super(context);
         init(context,null,0);
     }
 
-    public AddDes(Context context, AttributeSet attrs) {
+    public AddDes_Style02(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context,attrs,0);
     }
 
-    public AddDes(Context context, AttributeSet attrs, int defStyleAttr) {
+    public AddDes_Style02(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context,attrs,defStyleAttr);
         init(context, attrs, defStyleAttr);
     }
@@ -75,10 +73,10 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     public void init(Context context,AttributeSet attrs, int defStyleAttr) {
         mContext = context;
 
-        TypedArray attrsArray = context.obtainStyledAttributes(attrs, R.styleable.AddDes, defStyleAttr, 0);
+        TypedArray attrsArray = context.obtainStyledAttributes(attrs, R.styleable.AddDes_Style01, defStyleAttr, 0);
 
-        mBgColor = attrsArray.getInt(R.styleable.AddDes_backgroundcolor,R.color.bg_color);
-        mLineColor = attrsArray.getInt(R.styleable.AddDes_linecolor,R.color.line_color);
+        mBgColor = attrsArray.getInt(R.styleable.AddDes_Style01_backgroundcolor,R.color.bg_color);
+        mLineColor = attrsArray.getInt(R.styleable.AddDes_Style01_linecolor,R.color.line_color);
         attrsArray.recycle();
 
         mPaintH = new Paint();
@@ -98,6 +96,8 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
         mSqrt = Math.sqrt((double) 2);
         mHor = new CusLine();
         mVer = new CusLine();
+        mQua1 = new CusLine();
+        mQua2 = new CusLine();
 
         setOnLongClickListener(this);
         setOnClickListener(this);
@@ -126,6 +126,16 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
         mVer.endX = EDG / 2;
         mVer.endY = (float) (EDG / 2 + EDG / 2 / mSqrt);
 
+        mQua1.startX = EDG/4;
+        mQua1.startY = EDG/4;
+        mQua1.endX = 3*EDG/4;
+        mQua1.endY = 3*EDG/4;
+
+        mQua2.startX = 3*EDG/4;
+        mQua2.startY = EDG/4;
+        mQua2.endX = EDG/4;
+        mQua2.endY = 3*EDG/4;
+
         setMeasuredDimension(mWidth, mHeight);
     }
 
@@ -134,31 +144,38 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
         //super.onDraw(canvas);
         canvas.drawCircle(mWidth/2,mHeight/2,mWidth/2,mPaintV);
         if (mCurrentState == true) {
-        if (flag == true) {
-            canvas.save();
-            canvas.rotate(mDegree1, mWidth / 2, mHeight / 2);
-            canvas.drawLine(mHor.startX, mHor.startY, mHor.endX, mHor.endY, mPaintH);
-            canvas.restore();
-            canvas.drawLine(mVer.startX, mVer.startY, mVer.endX, mVer.endY, mPaintH);
-        } else {
-            canvas.save();
-            canvas.rotate(-mDegree2, mWidth / 2, mHeight / 2);
-            canvas.drawLine(mVer.startX, mVer.startY, mVer.endX, mVer.endY, mPaintH);
-            canvas.drawLine(mVer.startX, mVer.startY, mVer.endX, mVer.endY, mPaintH);
-            canvas.restore();
-        }
-        } else {
             if (flag == true) {
                 canvas.save();
                 canvas.rotate(mDegree1, mWidth / 2, mHeight / 2);
                 canvas.drawLine(mHor.startX, mHor.startY, mHor.endX, mHor.endY, mPaintH);
+                canvas.drawLine(mVer.startX, mVer.startY, mVer.endX, mVer.endY, mPaintH);
                 canvas.restore();
-                canvas.drawLine(mHor.startX, mHor.startY, mHor.endX, mHor.endY, mPaintH);
             } else {
                 canvas.save();
                 canvas.rotate(-mDegree2, mWidth / 2, mHeight / 2);
+                canvas.drawLine(mQua1.startX, mQua1.startY, mQua1.endX, mQua1.endY, mPaintH);
+                canvas.restore();
+                canvas.save();
+                canvas.rotate(mDegree2, mWidth / 2, mHeight / 2);
+                canvas.drawLine(mQua2.startX, mQua2.startY, mQua2.endX, mQua2.endY, mPaintH);
+                canvas.restore();
+            }
+        } else {
+            if (flag == true) {
+                canvas.save();
+                canvas.rotate(-mDegree1, mWidth / 2, mHeight / 2);
                 canvas.drawLine(mHor.startX, mHor.startY, mHor.endX, mHor.endY, mPaintH);
-                canvas.drawLine(mVer.startX, mVer.startY, mVer.endX, mVer.endY, mPaintH);
+                canvas.restore();
+                canvas.save();
+                canvas.rotate(mDegree1, mWidth / 2, mHeight / 2);
+                canvas.drawLine(mHor.startX, mHor.startY, mHor.endX, mHor.endY, mPaintH);
+                canvas.restore();
+
+            } else {
+                canvas.save();
+                canvas.rotate(-mDegree2, mWidth / 2, mHeight / 2);
+                canvas.drawLine(mQua1.startX, mQua1.startY, mQua1.endX, mQua1.endY, mPaintH);
+                canvas.drawLine(mQua2.startX, mQua2.startY, mQua2.endX, mQua2.endY, mPaintH);
                 canvas.restore();
             }
 
@@ -175,16 +192,14 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
 
     @Override
     public void onClick(View v) {
-        mOnStateChangeListener.changeState(mCurrentState);
-
+        if (mOnStateChangeListener!=null){
+            mOnStateChangeListener.changeState(mCurrentState);
+        }
     }
 
-    OnStateChangeListener mOnStateChangeListener;
-    public interface OnStateChangeListener{
-        public void changeState(boolean state);
-    }
+    OnStatChangeListener mOnStateChangeListener;
 
-    public void setOnStateChange(OnStateChangeListener listener){
+    public void setOnStateChange(OnStatChangeListener listener){
         mOnStateChangeListener = listener;
     }
 
@@ -200,7 +215,7 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
             }
         };
 
-        mTimer1.schedule(mTimerTask1, 10, 10);
+        mTimer1.schedule(mTimerTask1, PERIOD, PERIOD);
     }
 
     public void startStep2() {
@@ -212,13 +227,13 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
             }
         };
 
-        mTimer2.schedule(mTimerTask2, 10, 10);
+        mTimer2.schedule(mTimerTask2, PERIOD, PERIOD);
     }
 
     public void convertVer() {
         mDegree1 += 3;
         mHandler.sendEmptyMessage(0);
-        if (mDegree1 >= 90) {
+        if (mDegree1 >= 45) {
             mTimer1.cancel();
             mHandler.sendEmptyMessage(1);
         }
@@ -227,7 +242,7 @@ public class AddDes extends View implements View.OnLongClickListener, View.OnCli
     public void convertHor() {
         mDegree2 += 3;
         mHandler.sendEmptyMessage(0);
-        if (mDegree2 >= 90) {
+        if (mDegree2 >= 45) {
             mTimer2.cancel();
             mHandler.sendEmptyMessage(2);
         }
